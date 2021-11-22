@@ -9,7 +9,7 @@ Written in Processing 3.
 Visualises the Riemann Sphere by plotting functions (Including multivariable and some special functions) on the Complex Plane (using one of several colouring methods) on either a flat cartesian co-ordinate grid, or its stereographic projection to the Riemann Sphere.
 
 ## Controls
-Dragging Mouse	Control Camera / Spinbox
+    Dragging Mouse		Control Camera / Spinbox
 
 	TAB			Open Function Menu
 	
@@ -19,7 +19,7 @@ Dragging Mouse	Control Camera / Spinbox
 	 
 	[/]			Change scaling for height in plane mode
 	
-SHIFT + [/]		Change scaling for colour maps (grid size)
+    SHIFT + [/]			Change scaling for colour maps (grid size)
 
 
 
