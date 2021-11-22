@@ -13,7 +13,7 @@ Visualises the Riemann Sphere by plotting functions (Including multivariable and
 	
     Dragging Mouse		Control Camera / Spinbox
     
-    Right-Click & Drag 		When used on a spinbox, activates snapping to nearest integer/gridpoint(use polar grid for polar snapping)
+    Right-Click & Drag 	When used on a spinbox, activates snapping to nearest integer/gridpoint(use polar grid for polar snapping)
     
 	TAB			Open/Close Function Menu
 	
@@ -23,7 +23,7 @@ Visualises the Riemann Sphere by plotting functions (Including multivariable and
 	 
 	[/]			Change scaling for height in plane mode
 	
-    SHIFT + [/]			Change scaling for colour maps (grid size)
+    SHIFT + [/]		Change scaling for colour maps (grid size)
     
    	 '			Enable/Disable mapping of |z| to height in plane mode
 
