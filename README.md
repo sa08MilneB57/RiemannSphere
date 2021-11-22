@@ -9,17 +9,23 @@ Written in Processing 3.
 Visualises the Riemann Sphere by plotting functions (Including multivariable and some special functions) on the Complex Plane (using one of several colouring methods) on either a flat cartesian co-ordinate grid, or its stereographic projection to the Riemann Sphere.
 
 ## Controls
+	ESC 		Exit program
+	
     Dragging Mouse		Control Camera / Spinbox
-
+    
+    Right-Click & Drag 	When used on a spinbox, activates snapping to nearest integer/gridpoint(use polar grid for polar snapping)
+    
 	TAB			Open Function Menu
 	
-	 P 			Switch between sphere and plane
+	 P 			Switch between sphere and plane mode
 	 
 	 #			Next colour map (SHIFT for previous)
 	 
 	[/]			Change scaling for height in plane mode
 	
     SHIFT + [/]			Change scaling for colour maps (grid size)
+    
+    '			Enable/Disable mapping of |z| to height in plane mode
 
 
 
@@ -65,3 +71,5 @@ Inputs lablled with a capital letter are controlled using labelled spinboxes tha
 	Implement integer spinboxes for the Hermite Polynomials and similar families. (You can see a complex version of a Hermite Function by using the plus and minus keys already.)
 	Make function list adapt to screen size
 	Refactor multivariable functions code and stop treating them all like special cases.
+	Hurwitz Zeta Function?
+	Polynomial Families / Arbitrary Polynomials?

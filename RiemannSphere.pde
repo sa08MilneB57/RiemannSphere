@@ -3,9 +3,8 @@ final int MENUTEXTSIZE = 20;
 int SPINBOXSIZE = 360;
 
 ComplexColorMap[] cmaps;
-MobiusTransform mobius;
-Binomial binomial;
-BesselFirst bessel1;
+InteractableFunction[] interactables;
+InteractableFunction activeFunc;
 ListMenu flist;
 
 int activeCmap = 0;
@@ -28,9 +27,7 @@ int switchingM = 0;
 color hudBack = color(200,100,255,50);
 color hudFront = color(255);
 boolean showFuncMenu = false;
-boolean binomialMode = false;
-boolean mobiusMode = false;
-boolean bessel1Mode = false;
+boolean interactableMode = false;
 PFont fixed,thin;
 
 void setup(){
@@ -42,15 +39,16 @@ void setup(){
   plane = new ComplexPlane(RANGE,DETAIL);
   plane.applyFunction(new CIdentity());
   refreshColormap();
-  binomial = new Binomial(plane,cmaps[activeCmap],SPINBOXSIZE);
-  mobius = new MobiusTransform(plane,cmaps[activeCmap],SPINBOXSIZE);
-  bessel1 = new BesselFirst(plane,cmaps[activeCmap],SPINBOXSIZE);
+  interactables = new InteractableFunction[3];
+  interactables[0] = new Binomial(plane,cmaps[activeCmap],SPINBOXSIZE);
+  interactables[1] = new MobiusTransform(plane,cmaps[activeCmap],SPINBOXSIZE);
+  interactables[2] = new BesselFirst(plane,cmaps[activeCmap],SPINBOXSIZE);
   
   startDistance = (height/2.0) / tan(PI/6.0);
   
   fixed = createFont("Consolas",28);
   thin = createFont("Calibri Light",16);
-  flist = createFunctionList(plane,MENUTEXTSIZE);
+  flist = createFunctionList(interactables,plane,MENUTEXTSIZE);
 }
 
 void draw(){
@@ -95,14 +93,8 @@ void draw(){
     }
   }
   textFont(thin);
-  if(binomialMode){
-    binomial.show(activeCmap == 2);
-  }
-  if (mobiusMode){
-    mobius.show(activeCmap == 2);
-  }
-  if (bessel1Mode){
-    bessel1.show(activeCmap == 2);
+  if(interactableMode){
+    activeFunc.show(activeCmap == 2);
   }
   
   hint(ENABLE_DEPTH_TEST);
@@ -138,28 +130,13 @@ void refreshColormap(){
 }
 
 void normalMode(){
-  mobiusMode = false;
-  binomialMode = false;
-  bessel1Mode = false;
+  interactableMode = false;
 }
 
-void binomialMode(){
-  mobiusMode = false;
-  binomialMode = true;
-  bessel1Mode = false;
-  binomial.onUpdate();
-}
-void mobiusMode(){
-  mobiusMode = true;
-  binomialMode = false;
-  bessel1Mode = false;
-  mobius.onUpdate();
-}
-void besselMode(){
-  bessel1Mode = true;
-  mobiusMode = false;
-  binomialMode = false;
-  bessel1.onUpdate();
+void interactableMode(InteractableFunction function){
+  interactableMode = true;
+  activeFunc = function;
+  activeFunc.reColorise(cmaps[activeCmap]);
 }
 
 void mouseWheel(MouseEvent e){
@@ -169,7 +146,7 @@ void mouseWheel(MouseEvent e){
 }
 
 void mouseDragged(){
-  if((binomialMode && binomial.usingMouse()) || (mobiusMode && mobius.usingMouse()) || (bessel1Mode && bessel1.usingMouse())){
+  if((interactableMode && activeFunc.usingMouse())){
     //prevents mouse from controlling camera while using a spinbox
     return;
   }
@@ -220,17 +197,13 @@ void keyPressed(){
       colorScale--;
       if(colorScale == 0){colorScale = -2;}
       refreshColormap();
-      binomial.reColorise(cmaps[activeCmap]);
-      mobius.reColorise(cmaps[activeCmap]);
-      bessel1.reColorise(cmaps[activeCmap]);
+      activeFunc.reColorise(cmaps[activeCmap]);
       break;
     case '}':
       colorScale++;
       if(colorScale == -1){colorScale = 1;}
       refreshColormap();
-      binomial.reColorise(cmaps[activeCmap]);
-      mobius.reColorise(cmaps[activeCmap]);
-      bessel1.reColorise(cmaps[activeCmap]);
+      activeFunc.reColorise(cmaps[activeCmap]);
       break;
     case '\'':// '
       if(heightScale==0){
@@ -254,15 +227,11 @@ void keyPressed(){
       break;
     case '#':
       activeCmap = (activeCmap+1) % cmaps.length;
-      binomial.reColorise(cmaps[activeCmap]);
-      mobius.reColorise(cmaps[activeCmap]);
-      bessel1.reColorise(cmaps[activeCmap]);
+      activeFunc.reColorise(cmaps[activeCmap]);
       break;
     case '~':
       activeCmap = (activeCmap-1 + cmaps.length) % cmaps.length;
-      binomial.reColorise(cmaps[activeCmap]);
-      mobius.reColorise(cmaps[activeCmap]);
-      bessel1.reColorise(cmaps[activeCmap]);
+      activeFunc.reColorise(cmaps[activeCmap]);
       break;
   }
 }

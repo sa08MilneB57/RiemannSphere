@@ -5,6 +5,7 @@ abstract class InteractableFunction implements ComplexFunction{
   
   abstract void show(boolean alt); //show functions should also handle interactivity and apply onUpdate();
   abstract boolean usingMouse();
+  abstract void reColorise(ComplexColorMap cmap);
   void onUpdate(){
     plane.applyFunction(this);
   }
@@ -21,7 +22,7 @@ class BesselFirst extends InteractableFunction{
     order = new ComplexSpinBox(new Complex(1,0),cmap,(width-spinBoxSize)/2 ,height-spinBoxSize - 5,spinBoxSize,spinBoxSize);
     updateTerms();
   }
-  String name(){return "BesselFirst: J_a(z)";}
+  String name(){return "Bessel-1st of order A: J_A(z)";}
   
   Complex f(Complex z){
     Complex sum = new Complex(0,0);
@@ -63,6 +64,7 @@ class BesselFirst extends InteractableFunction{
     }
   }
   
+  @Override
   void onUpdate(){
     updateTerms();
     super.onUpdate();
@@ -80,7 +82,7 @@ class Binomial extends InteractableFunction{
     k = new ComplexSpinBox(new Complex(1,0),cmap,(width-spinBoxSize)/2 ,height-spinBoxSize - 5,spinBoxSize,spinBoxSize);
     rGamma = new CReciprocalGamma(accuracy);
   }
-  String name(){return "z choose " + k.value();}
+  String name(){return "Binomial: z choose K";}
   
   
   Complex f(Complex z){
@@ -124,7 +126,7 @@ class MobiusTransform extends InteractableFunction{
     d = new ComplexSpinBox(new Complex(1,0),  cmap,  cursor,yPos,  spinBoxSize,spinBoxSize);
     cursor += increment;
   }
-  String name(){return "(Az + B) / (Cz + D)";}
+  String name(){return "Mobius: (Az + B) / (Cz + D)";}
   
   Complex f(Complex z){return ( z.mult(a.value()).add(b.value()) 
                        ).divBy( z.mult(c.value()).add(d.value()) );}
