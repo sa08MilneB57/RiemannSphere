@@ -13,9 +13,9 @@ Visualises the Riemann Sphere by plotting functions (Including multivariable and
 	
     Dragging Mouse		Control Camera / Spinbox
     
-    Right-Click & Drag 	When used on a spinbox, activates snapping to nearest integer/gridpoint(use polar grid for polar snapping)
+    Right-Click & Drag 		When used on a spinbox, activates snapping to nearest integer/gridpoint(use polar grid for polar snapping)
     
-	TAB			Open Function Menu
+	TAB			Open/Close Function Menu
 	
 	 P 			Switch between sphere and plane mode
 	 
