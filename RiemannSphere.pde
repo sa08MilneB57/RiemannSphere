@@ -1,6 +1,6 @@
 int hermiteOrder = 0;
 final int MENUTEXTSIZE = 20;
-final int SPINBOXSIZE = 360;
+int SPINBOXSIZE = 360;
 
 ComplexColorMap[] cmaps;
 MobiusTransform mobius;
@@ -35,10 +35,10 @@ PFont fixed,thin;
 
 void setup(){
   fullScreen(P3D);
-  //size(480,480,P3D);
+  //size(1000,800,P3D);
   hint(DISABLE_OPENGL_ERRORS);
   
-  
+  SPINBOXSIZE = min(width,height) / 5;
   plane = new ComplexPlane(RANGE,DETAIL);
   plane.applyFunction(new CIdentity());
   refreshColormap();
@@ -232,7 +232,7 @@ void keyPressed(){
       mobius.reColorise(cmaps[activeCmap]);
       bessel1.reColorise(cmaps[activeCmap]);
       break;
-    case '\'':
+    case '\'':// '
       if(heightScale==0){
         heightScale = oldHeightScale;
       } else {
