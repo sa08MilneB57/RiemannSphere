@@ -10,11 +10,17 @@ Visualises the Riemann Sphere by plotting functions (Including multivariable and
 
 ## Controls
 Dragging Mouse	Control Camera / Spinbox
+
 	TAB			Open Function Menu
+	
 	 P 			Switch between sphere and plane
+	 
 	 #			Next colour map (SHIFT for previous)
+	 
 	[/]			Change scaling for height in plane mode
+	
 SHIFT + [/]		Change scaling for colour maps (grid size)
+
 
 
 ## Currently available single-variable functions (w=f(z)):
