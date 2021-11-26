@@ -197,13 +197,17 @@ void keyPressed(){
       colorScale--;
       if(colorScale == 0){colorScale = -2;}
       refreshColormap();
-      activeFunc.reColorise(cmaps[activeCmap]);
+      if(interactableMode){
+        activeFunc.reColorise(cmaps[activeCmap]);
+      }
       break;
     case '}':
       colorScale++;
       if(colorScale == -1){colorScale = 1;}
       refreshColormap();
-      activeFunc.reColorise(cmaps[activeCmap]);
+      if(interactableMode){
+        activeFunc.reColorise(cmaps[activeCmap]);
+      }
       break;
     case '\'':// '
       if(heightScale==0){
@@ -227,11 +231,15 @@ void keyPressed(){
       break;
     case '#':
       activeCmap = (activeCmap+1) % cmaps.length;
-      activeFunc.reColorise(cmaps[activeCmap]);
+      if(interactableMode){
+        activeFunc.reColorise(cmaps[activeCmap]);
+      }
       break;
     case '~':
       activeCmap = (activeCmap-1 + cmaps.length) % cmaps.length;
-      activeFunc.reColorise(cmaps[activeCmap]);
+      if(interactableMode){
+        activeFunc.reColorise(cmaps[activeCmap]);
+      }
       break;
   }
 }
