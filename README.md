@@ -2,7 +2,7 @@
 
 Written in Processing 3.
 ## Download and Install
- - On windows, download the appropriate zip file marked "RiemannSphere Windows XX-Bit.zip"
+ - On windows, download the appropriate zip file marked "RiemannSphere Windows XX-Bit.zip" (For 32-bit you will also need Java 8)
  - Otherwise, download Processing 3 from https://processing.org/ and everything EXCEPT the zip files. Use Processing 3 to open RiemannSphere.pde and click "play"
 
 ## Description 
