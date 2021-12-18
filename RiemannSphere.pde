@@ -1,6 +1,13 @@
-int hermiteOrder = 0;
+//Feel free to change variables in this block, I'm planning on adding a settings dialogue for most of them
 final int MENUTEXTSIZE = 20;
-int SPINBOXSIZE = 360;
+final int DETAIL = 521;
+final double RANGE = 16;
+final float sphereRadius = 100;
+final float camSensitivity = 1f/100f;
+final color hudBack = color(200,100,255,50);
+final color hudFront = color(255);
+
+
 
 ComplexColorMap[] cmaps;
 InteractableFunction[] interactables;
@@ -9,23 +16,18 @@ ListMenu flist;
 
 int activeCmap = 0;
 ComplexPlane plane;
-final float sphereRadius = 100;
+int SPINBOXSIZE;
 float spheriness = 0f;
-final int DETAIL = 521;
-final double RANGE = 20;
 float camAzimuth = 0;
 float camElevation = 0;
 float camDistance = sphereRadius;
 float startDistance;
-final float camSensitivity = 1f/100f;
 float heightScale = sphereRadius/10f;
 int colorScale = 1;
 float oldHeightScale;
 int turningA = 0;
 int turningE = 0;
 int switchingM = 0;
-color hudBack = color(200,100,255,50);
-color hudFront = color(255);
 boolean showFuncMenu = false;
 boolean interactableMode = false;
 PFont fixed,thin;
@@ -39,16 +41,21 @@ void setup(){
   plane = new ComplexPlane(RANGE,DETAIL);
   plane.applyFunction(new CIdentity());
   refreshColormap();
-  interactables = new InteractableFunction[3];
+  interactables = new InteractableFunction[6];
   interactables[0] = new Binomial(plane,cmaps[activeCmap],SPINBOXSIZE);
   interactables[1] = new MobiusTransform(plane,cmaps[activeCmap],SPINBOXSIZE);
-  interactables[2] = new BesselFirst(plane,cmaps[activeCmap],SPINBOXSIZE);
+  interactables[2] = new ArbitraryPolynomial(plane,cmaps[activeCmap],SPINBOXSIZE);
+  interactables[3] = new ArbitraryPolynomialRoots(plane,cmaps[activeCmap],SPINBOXSIZE);
+  interactables[4] = new AtomicSingularInnerFunction(plane,SPINBOXSIZE);
+  interactables[5] = new HermiteFunction(plane,SPINBOXSIZE);
+  //interactables[6] = new BesselFirst(plane,cmaps[activeCmap],SPINBOXSIZE);
   
   startDistance = (height/2.0) / tan(PI/6.0);
   
   fixed = createFont("Consolas",28);
   thin = createFont("Calibri Light",16);
   flist = createFunctionList(interactables,plane,MENUTEXTSIZE);
+  
 }
 
 void draw(){
@@ -79,11 +86,11 @@ void draw(){
   textSize(28);
   rectMode(CORNER);
   fill(hudBack);
-  rect(5,10,plane.currentFunction.name().length() * 20 + 20,40);
+  rect(5,10,plane.currentFunction.name().length() * 22 + 20,40);
   fill(hudFront);
   text(plane.currentFunction.name(),20,40);
   fill(hudBack);
-  rect(5,60,160,40);
+  rect(5,60,240,40);
   fill(hudFront);
   text("GridScale:" + ((colorScale>0)?colorScale:"1/" + (-colorScale)),10,90);
   
@@ -96,6 +103,7 @@ void draw(){
   if(interactableMode){
     activeFunc.show(activeCmap == 2);
   }
+  
   
   hint(ENABLE_DEPTH_TEST);
   
@@ -118,6 +126,7 @@ void draw(){
        switchingM = 0;
     }
   }
+  
 }
 
 void refreshColormap(){
@@ -176,15 +185,6 @@ void keyPressed(){
   switch(key){
     case '\t':
       showFuncMenu = !showFuncMenu;
-      break;
-    case '-':
-      hermiteOrder--;
-      if(hermiteOrder < 0){hermiteOrder = 0;}
-      plane.applyFunction(new CHermiteFunction(hermiteOrder));
-      break;
-    case '=':
-      hermiteOrder++;
-      plane.applyFunction(new CHermiteFunction(hermiteOrder));
       break;
     case '[':
       heightScale *= 0.8;

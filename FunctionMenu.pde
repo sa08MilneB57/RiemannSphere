@@ -48,7 +48,7 @@ ListMenu createFunctionList(InteractableFunction[] interactables,ComplexPlane pl
   
   int maxwidth = 0; //find the maximum label length
   for(int i=0; i<FUNCTIONS.length;i++){maxwidth = max(maxwidth,FUNCTIONS[i].name().length());}
-  PVector size = new PVector(maxwidth*txtSize/2f + 40,increment.y); //use maxwidth to set size of buttons, full sides of a rectangle
+  PVector size = new PVector(maxwidth*txtSize,increment.y); //use maxwidth to set size of buttons, full sides of a rectangle
   
   
   //generate listitems
@@ -70,7 +70,7 @@ class FunctionListItem extends ListItem{
     ComplexFunction function;
     ComplexPlane plane;
     FunctionListItem(ComplexFunction val,ComplexPlane cplane,PVector p,PVector s,float H, float S, float L){
-      super(val.name(),p,s,H,S,L);
+      super(val.menuName(),p,s,H,S,L);
       function = val;
       plane = cplane;
     }
@@ -88,7 +88,7 @@ class InteractableFunctionListItem extends ListItem{
   InteractableFunction function;
   ComplexPlane plane;
   InteractableFunctionListItem(InteractableFunction val,ComplexPlane cplane,PVector p,PVector s,float H, float S, float L){
-      super(val.name(),p,s,H,S,L);
+      super(val.menuName(),p,s,H,S,L);
       function = val;
       plane = cplane;
   }

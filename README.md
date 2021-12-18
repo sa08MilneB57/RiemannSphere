@@ -23,7 +23,7 @@ Visualises the Riemann Sphere by plotting functions (Including multivariable and
 	 
 	[/]			Change scaling for height in plane mode
 	
-    SHIFT + [/]		Change scaling for colour maps (grid size)
+    SHFT + [/]	Change scaling for colour maps (grid size)
     
    	 '			Enable/Disable mapping of |z| to height in plane mode
 
@@ -63,12 +63,15 @@ Visualises the Riemann Sphere by plotting functions (Including multivariable and
 
 	w = Binomial (z choose K)
 	w = Mobius Transform (Az + B)/(Cz + D)
-	w = (Not ready yet. Approximation diverges quickly.) ~Ath-order Bessel Function of the First Kind~ 
-Inputs lablled with a capital letter are controlled using labelled spinboxes that appear when function is selected. Apologies for how hard it can be to read the numbers. I have some work to do.
+	w = Atomic Singular Inner Function (Got the idea from https://blogs.ams.org/visualinsight/2013/10/15/atomic-singular-inner-function/ and assumed it would work as well with numbers other than 5)
+	w = Polynomials from COEFFICIENTS
+	w = Polynomials from ROOTS (Constructed as product of monomials of the form "(z - root)")
+	w = Hermite Function (not polynomial, QHO solution, gaussian part has an absolute value on it)
+Inputs lablled with capital letters are controlled using labelled spinboxes that appear when function is selected. Apologies for how hard it can be to read the numbers. I have some work to do.
 
 ## Work-In-Progress stuff
-	Getting a better approximation for the Bessel Functions that doesn't diverge so hard
-	Implement integer spinboxes for the Hermite Polynomials and similar families. (You can see a complex version of a Hermite Function by using the plus and minus keys already.)
+	w = ~Ath-order Bessel Function of the First Kind~ needs a better approximation for the Bessel Functions that doesn't diverge so hard
 	Make function list adapt to screen size
 	Hurwitz Zeta Function?
-	Polynomial Families / Arbitrary Polynomials?
+	Add something that lets the user change the level of detail and the range out to which everything is plotted. (Achievable if you download the source and run it in Processing by changing the variables RANGE and DETAIL in the main file) as of now it goes out to magnitude 16 by default.
+	Add a new spinbox for non-integer reals. Mostly to adjust settings and whatnot but maybe for functions or adjusting branch cuts.

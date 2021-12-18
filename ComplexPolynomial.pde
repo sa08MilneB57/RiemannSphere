@@ -25,6 +25,7 @@ class CPolynomial implements ComplexFunction{
     out = out.substring(0,out.length() - 3);
     return out;
   }
+  String menuName(){return name();}
   
   Complex f(Complex x){
     Complex out = coefficients[0];
@@ -69,7 +70,7 @@ class CPolynomial implements ComplexFunction{
     int othrlength = other.coefficients.length;
     Complex[] newCoefs = new Complex[thislength + othrlength - 1];
     for(int i=0; i<thislength; i++){
-      for(int j=0; j<thislength; j++){
+      for(int j=0; j<othrlength; j++){
         if(newCoefs[i+j] == null){newCoefs[i+j] = ZERO;}
         Complex product = coefficients[i].mult(other.coefficients[j]);
         newCoefs[i+j] = newCoefs[i+j].add(product);
@@ -124,7 +125,7 @@ CPolynomial fromRoots(Complex[] roots){
   for(Complex root: roots){
     Complex[] monoterms = {root.neg(),ONE};
     CPolynomial monomial = new CPolynomial(monoterms);
-    out.mult(monomial);
+    out = out.mult(monomial);
   }
   return out;
 }

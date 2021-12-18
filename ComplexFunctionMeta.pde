@@ -13,6 +13,7 @@ class ProductWrapper implements ComplexFunction{
     }
     return out.substring(0,out.length() - 3);
   }
+  String menuName(){return name();}
   
   Complex f(Complex z){
     Complex out = new Complex(1,0);
@@ -31,6 +32,7 @@ class QuotientWrapper implements ComplexFunction{
   String name(){
     return "(" + N.name() + ") / (" + D.name() + ")";
   }
+  String menuName(){return name();}
   
   Complex f(Complex z){
     return N.f(z).divBy(D.f(z));
@@ -45,6 +47,7 @@ class ComposeWrapper implements ComplexFunction{
     inner = innerfunction;
   }
   String name(){return outer.name().replaceAll("z",inner.name());}
+  String menuName(){return name();}
   Complex f(Complex z){return outer.f(inner.f(z));}
   
 }

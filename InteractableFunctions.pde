@@ -11,6 +11,181 @@ abstract class InteractableFunction implements ComplexFunction{
   }
 }
 
+class ArbitraryPolynomial extends InteractableFunction{
+  CPolynomial P;
+  IntegerSpinBox order;
+  ComplexSpinBox[] coefficients;
+  ArbitraryPolynomial(ComplexPlane _plane, ComplexColorMap cmap,int spinBoxSize){
+    super(_plane);
+    order = new IntegerSpinBox(2,(width - spinBoxSize)/2 ,48 ,spinBoxSize,spinBoxSize/2,0.3);
+    onUpdateOrder(cmap);
+  }
+  
+  String name(){return P.name();}
+  String menuName(){return "Polynomial from Coefficients";}
+  Complex f(Complex z){return P.f(z);}
+  
+  boolean usingMouse(){
+    boolean out = false;
+    for(ComplexSpinBox spinner : coefficients){
+      out = out || spinner.dragging;
+    }
+    return out;
+  }
+  
+  void reColorise(ComplexColorMap cmap){
+    for(ComplexSpinBox spinner : coefficients){
+      spinner.reColorise(cmap);
+    }
+  }
+  
+  @Override
+  void onUpdate(){//this function is run when the order or the coefficients are updated
+    Complex[] coefs = new Complex[coefficients.length];
+    for (int i=0; i<= order.value(); i++){
+      coefs[i] = coefficients[i].value();
+    }
+    P = new CPolynomial(coefs);
+    super.onUpdate();
+  }
+  
+  void onUpdateOrder(ComplexColorMap cmap){ //this function is ran when the order is updated
+    if(order.value() <0){order.setValue(0);}
+    float horizontalSpacing = width/(order.value() + 3f);//+1 because the order is one less than the length, plus 2 for either end of the screen
+    int spinBoxSize = (int)min(height/5 , horizontalSpacing);
+    if (coefficients == null){//if there is no spinners
+      coefficients = new ComplexSpinBox[order.value() + 1];
+      for (int i=0; i<= order.value(); i++){
+        coefficients[i] = new ComplexSpinBox(new Complex(1,0),cmap,horizontalSpacing * (i+1) ,height-spinBoxSize - 5,spinBoxSize,spinBoxSize);
+      }
+    } else if (order.value() + 1 < coefficients.length){//when the order decreases
+      ComplexSpinBox[] newSpinners = new ComplexSpinBox[order.value() + 1];
+      for (int i=0; i<= order.value(); i++){
+        newSpinners[i] = new ComplexSpinBox(coefficients[i].value(),cmap,horizontalSpacing * (i+1) ,height-spinBoxSize - 5,spinBoxSize,spinBoxSize);
+      }
+      coefficients = newSpinners;
+    } else if (order.value() + 1 > coefficients.length){//when the order increases
+      ComplexSpinBox[] newSpinners = new ComplexSpinBox[order.value() + 1];
+      for (int i=0; i< coefficients.length; i++){
+        newSpinners[i] = new ComplexSpinBox(coefficients[i].value(),cmap,horizontalSpacing * (i+1) ,height-spinBoxSize - 5,spinBoxSize,spinBoxSize);
+      }
+      for (int i=coefficients.length; i<= order.value(); i++){
+        newSpinners[i] = new ComplexSpinBox(new Complex(1,0),cmap,horizontalSpacing * (i+1) ,height-spinBoxSize - 5,spinBoxSize,spinBoxSize);
+      }
+      coefficients = newSpinners;
+    }
+  }
+  void show(boolean polarSnap){
+    order.show();
+    if (order.justClicked){
+      onUpdateOrder(cmaps[activeCmap]);
+      onUpdate();
+    }
+    boolean complexUpdated = false;
+    for (int i=0; i<coefficients.length; i++){
+      ComplexSpinBox spinner = coefficients[i];
+      complexUpdated = complexUpdated || spinner.show(polarSnap);
+      text(i,spinner.screenPos.x + spinner.screenSize.x/2 , spinner.screenPos.y + 16);
+    }
+    if( complexUpdated ){
+      onUpdate();
+    }
+  }
+}
+
+class ArbitraryPolynomialRoots extends InteractableFunction{
+  CPolynomial P;
+  IntegerSpinBox rootNum;
+  ComplexSpinBox[] roots;
+  ArbitraryPolynomialRoots(ComplexPlane _plane, ComplexColorMap cmap,int spinBoxSize){
+    super(_plane);
+    rootNum = new IntegerSpinBox(4,(width - spinBoxSize)/2 ,48 ,spinBoxSize,spinBoxSize/2,0.3);
+    onUpdateOrder(cmap);
+  }
+  
+  String name(){
+    String[] monos = new String[rootNum.value()];
+    for(int i=0;i<rootNum.value();i++){
+      monos[i] = "(z-" + roots[i].value() + ")";
+    }
+    String out = "";
+    for(int i=0;i<rootNum.value()-1;i++){
+      out += monos[i] + " * ";
+    }
+    out += monos[rootNum.value() - 1];
+    return out;
+  }
+  String menuName(){return "Polynomial from Roots";}
+  Complex f(Complex z){return P.f(z);}
+  
+  boolean usingMouse(){
+    boolean out = false;
+    for(ComplexSpinBox spinner : roots){
+      out = out || spinner.dragging;
+    }
+    return out;
+  }
+  
+  void reColorise(ComplexColorMap cmap){
+    for(ComplexSpinBox spinner : roots){
+      spinner.reColorise(cmap);
+    }
+  }
+  
+  @Override
+  void onUpdate(){//this function is run when the order or the coefficients are updated
+    Complex[] rootVals = new Complex[roots.length];
+    for (int i=0; i< rootNum.value(); i++){
+      rootVals[i] = roots[i].value();
+    }
+    P = fromRoots(rootVals);
+    super.onUpdate();
+  }
+  
+  void onUpdateOrder(ComplexColorMap cmap){ //this function is ran when the order is updated
+    if(rootNum.value() <= 0){rootNum.setValue(1);}
+    float horizontalSpacing = width/(rootNum.value() + 2f);//plus 2 for either end of the screen
+    int spinBoxSize = (int)min(height/5 , horizontalSpacing);
+    if (roots == null){//if there is no spinners
+      roots = new ComplexSpinBox[4];
+      roots[0] = new ComplexSpinBox(new Complex(1,0),cmap,horizontalSpacing * (0+1) ,height-spinBoxSize - 5,spinBoxSize,spinBoxSize);
+      roots[1] = new ComplexSpinBox(new Complex(-1,0),cmap,horizontalSpacing * (1+1) ,height-spinBoxSize - 5,spinBoxSize,spinBoxSize);
+      roots[2] = new ComplexSpinBox(new Complex(0,1),cmap,horizontalSpacing * (2+1) ,height-spinBoxSize - 5,spinBoxSize,spinBoxSize);
+      roots[3] = new ComplexSpinBox(new Complex(0,-1),cmap,horizontalSpacing * (3+1) ,height-spinBoxSize - 5,spinBoxSize,spinBoxSize);
+    } else if (rootNum.value() < roots.length){//when the order decreases
+      ComplexSpinBox[] newSpinners = new ComplexSpinBox[rootNum.value()];
+      for (int i=0; i< rootNum.value(); i++){
+        newSpinners[i] = new ComplexSpinBox(roots[i].value(),cmap,horizontalSpacing * (i+1) ,height-spinBoxSize - 5,spinBoxSize,spinBoxSize);
+      }
+      roots = newSpinners;
+    } else if (rootNum.value() > roots.length){//when the order increases
+      ComplexSpinBox[] newSpinners = new ComplexSpinBox[rootNum.value()];
+      for (int i=0; i< roots.length; i++){
+        newSpinners[i] = new ComplexSpinBox(roots[i].value(),cmap,horizontalSpacing * (i+1) ,height-spinBoxSize - 5,spinBoxSize,spinBoxSize);
+      }
+      for (int i=roots.length; i< rootNum.value(); i++){
+        newSpinners[i] = new ComplexSpinBox(new Complex(1,0),cmap,horizontalSpacing * (i+1) ,height-spinBoxSize - 5,spinBoxSize,spinBoxSize);
+      }
+      roots = newSpinners;
+    }
+  }
+  void show(boolean polarSnap){
+    rootNum.show();
+    if (rootNum.justClicked){
+      onUpdateOrder(cmaps[activeCmap]);
+      onUpdate();
+    }
+    boolean complexUpdated = false;
+    for (int i=0; i<roots.length; i++){
+      ComplexSpinBox spinner = roots[i];
+      complexUpdated = complexUpdated || spinner.show(polarSnap);
+    }
+    if( complexUpdated ){
+      onUpdate();
+    }
+  }
+}
+
 class BesselFirst extends InteractableFunction{
   Complex[] coefs,pwrs;
   ComplexSpinBox order;
@@ -22,7 +197,8 @@ class BesselFirst extends InteractableFunction{
     order = new ComplexSpinBox(new Complex(1,0),cmap,(width-spinBoxSize)/2 ,height-spinBoxSize - 5,spinBoxSize,spinBoxSize);
     updateTerms();
   }
-  String name(){return "Bessel-1st of order A: J_A(z)";}
+  String name(){return "J_(" + order.value() + ")(z)";}
+  String menuName(){return "(WIP) Bessel-1st of order A: J_A(z)";}
   
   Complex f(Complex z){
     Complex sum = new Complex(0,0);
@@ -82,7 +258,8 @@ class Binomial extends InteractableFunction{
     k = new ComplexSpinBox(new Complex(1,0),cmap,(width-spinBoxSize)/2 ,height-spinBoxSize - 5,spinBoxSize,spinBoxSize);
     rGamma = new CReciprocalGamma(accuracy);
   }
-  String name(){return "Binomial: z choose K";}
+  String name(){return "Binomial: z choose " + k.value();}
+  String menuName(){return "Binomial: z choose K";}
   
   
   Complex f(Complex z){
@@ -109,6 +286,92 @@ class Binomial extends InteractableFunction{
   }
 }
 
+class AtomicSingularInnerFunction extends InteractableFunction{
+  IntegerSpinBox order;
+  Complex[] roots;
+  AtomicSingularInnerFunction(ComplexPlane _plane,int spinBoxSize){
+    super(_plane);
+    order = new IntegerSpinBox(5,(width - spinBoxSize)/2 ,height-spinBoxSize/2 - 5,spinBoxSize,spinBoxSize/2,0.3);
+  }
+  String name(){
+    String rootText = "exp(2iπ/" + order.value() + ")";
+    return "Product n=1 to " + Integer.toString(order.value()) + " of [ exp(  (z +" + rootText + "^n) / (z -" + rootText + "^n)  ) ]";
+  }
+  String menuName(){return "Atomic Singular Inner Function";}
+  Complex f(Complex z){
+    Complex out = new Complex(1,0);
+    for (Complex root : roots){
+      Complex term = z.add(root).divBy( z.sub(root) ).exp();
+      out = out.mult(term);
+    }
+    return out;
+  }
+  
+  @Override
+  void onUpdate(){
+    if(order.value() <0){order.setValue(0);}
+    roots = new Complex[order.value()];
+    for (int n=0; n<order.value(); n++){
+      roots[n] = fromPolar(n*2d*Math.PI/order.value());
+    }
+    super.onUpdate();
+  }
+  
+  boolean usingMouse(){
+    return order.justClicked;
+  }
+  
+  void show(boolean polarSnap){
+    final boolean clicked = order.show();
+    if( clicked ){
+      onUpdate();
+    }
+  }
+  void reColorise(ComplexColorMap cmap){}
+  
+}
+
+class HermiteFunction extends InteractableFunction{
+  IntegerSpinBox order;
+  ComplexFunction H,G,C,F;
+  HermiteFunction(ComplexPlane _plane,int spinBoxSize){
+    super(_plane);
+    order = new IntegerSpinBox(3,(width - spinBoxSize)/2 ,height-spinBoxSize/2 - 5,spinBoxSize,spinBoxSize/2,0.3);    
+    refreshFunctions();
+  }
+  String name(){return F.name();}
+  String menuName(){return "Hermite Functions";}
+  Complex f(Complex z){return F.f(z);}
+  
+  void refreshFunctions(){
+    if(order.value() <0){order.setValue(0);}
+    double constant = 1d/Math.sqrt(Math.scalb( Math.sqrt(Math.PI)*factorial(order.value()) , order.value()) );
+    H = new CHermitePolynomial(order.value());
+    G = new ComposeWrapper(new CGaussAbs(),new CScale(new Complex(Math.sqrt(2),0)));//exp(|z|^2 / 2)
+    C = new CConstant(new Complex(constant,0));
+    ComplexFunction[] factors = {C,G,H};
+    F = new ProductWrapper(factors);
+  }
+  
+  @Override
+  void onUpdate(){
+    refreshFunctions();
+    super.onUpdate();
+  }
+  
+  boolean usingMouse(){
+    return order.justClicked;
+  }
+  
+  void show(boolean polarSnap){
+    final boolean clicked = order.show();
+    if( clicked ){ onUpdate(); }
+  }
+  void reColorise(ComplexColorMap cmap){}
+  
+}
+
+
 
 class MobiusTransform extends InteractableFunction{
   ComplexSpinBox a,b,c,d;
@@ -126,7 +389,8 @@ class MobiusTransform extends InteractableFunction{
     d = new ComplexSpinBox(new Complex(1,0),  cmap,  cursor,yPos,  spinBoxSize,spinBoxSize);
     cursor += increment;
   }
-  String name(){return "Mobius: (Az + B) / (Cz + D)";}
+  String name(){return "(Az + B) / (Cz + D)";}
+  String menuName(){return "Mobius Transformations";}
   
   Complex f(Complex z){return ( z.mult(a.value()).add(b.value()) 
                        ).divBy( z.mult(c.value()).add(d.value()) );}
