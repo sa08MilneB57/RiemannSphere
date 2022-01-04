@@ -41,8 +41,20 @@ class ComplexPlane{
     }
   }
   
-  PVector toHeightmap(Complex z,Complex f, float XZscale,float heightScale){
-    return new PVector((float)(XZscale*z.re),(f.isNaN())?(100):(-(float)(f.mag()*heightScale)),-(float)(XZscale*z.im));
+  PVector toHeightmap(Complex z,Complex f, float XZscale,float heightScale,int heightSourceMode){
+    float h = 0;
+    switch (heightSourceMode){
+      case 1://abs
+        h = (f.isNaN())?(100):(-(float)(f.mag()*heightScale));
+        break;
+      case 2://re
+        h = (f.isNaN())?(100):(-(float)(f.re*heightScale));
+        break;
+      case 3://im
+        h = (f.isNaN())?(100):(-(float)(f.im*heightScale));
+        break;
+    }
+    return new PVector((float)(XZscale*z.re),h,-(float)(XZscale*z.im));
   }
   
   PVector toRiemannSphere(Complex z,float radius){
@@ -70,7 +82,7 @@ class ComplexPlane{
     }
   }
 
-  void show(float radius,float heightScale,float spheriness,ComplexColorMap cmap){
+  void show(float radius,float heightScale,float spheriness,ComplexColorMap cmap,int heightMode){
     noStroke();
     //strokeWeight(1);
     //stroke(100);
@@ -86,8 +98,8 @@ class ComplexPlane{
         //the pp stands for Point-on-Plane
         PVector ps,psS,pp,ppS,p,pS;
         if(spheriness == 0){
-          pp = toHeightmap(z,f,radius,heightScale);
-          ppS = toHeightmap(zS,fS,radius,heightScale);
+          pp = toHeightmap(z,f,radius,heightScale,heightMode);
+          ppS = toHeightmap(zS,fS,radius,heightScale,heightMode);
           p = pp;
           pS = ppS;
         } else if (spheriness == 1){
@@ -96,8 +108,8 @@ class ComplexPlane{
           p = ps;
           pS = psS;
         } else {
-          pp = toHeightmap(z,f,radius,heightScale);
-          ppS = toHeightmap(zS,fS,radius,heightScale);
+          pp = toHeightmap(z,f,radius,heightScale,heightMode);
+          ppS = toHeightmap(zS,fS,radius,heightScale,heightMode);
           ps = toRiemannSphere(z,radius);
           psS = toRiemannSphere(zS,radius);
           p = pp.lerp(ps,spheriness);
