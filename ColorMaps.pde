@@ -97,6 +97,82 @@ class ArgandPolar extends ComplexColorMap {
   }
 }
 
+class ArgandStripedRB extends ComplexColorMap {
+  double gridFactor,dTheta;
+  ArgandStripedRB(double gridsize) {
+    gridFactor = 1d/gridsize;
+  }
+  color map(Complex z) {
+    if (z.isNaN()) {
+      return color(127);
+    }
+    final double re = gridFactor*z.re;
+    final double im = gridFactor*z.im;
+    float red = (float)(((re % 1d) + 1d) % 1d);
+    red = 200*red + 35;
+    float blue = (float)(((im % 1d) + 1d) % 1d);
+    blue = 200*blue + 35;
+    
+    return color(red, 0, blue);
+  }
+}
+class ArgandStripedLogRB extends ComplexColorMap {
+  double logFactor,dTheta;
+  ArgandStripedLogRB(double logBase) {
+    logFactor = 1d/Math.log(logBase);
+  }
+  color map(Complex z) {
+    if (z.isNaN()) {
+      return color(127);
+    }
+    final double re = logFactor*Math.log(Math.abs(z.re));
+    final double im = logFactor*Math.log(Math.abs(z.im));
+    float red = (float)(((re % 1d) + 1d) % 1d);
+    red = 200*red + 35;
+    float blue = (float)(((im % 1d) + 1d) % 1d);
+    blue = 200*blue + 35;
+    
+    return color(red, (red+blue)/2, blue);
+  }
+}
+
+class ArgandStripedPolar extends ComplexColorMap {
+  double gridFactor,dTheta;
+  ArgandStripedPolar(double radialGrid, int angles) {
+    gridFactor = 1d/radialGrid;
+    dTheta = TAU / angles;
+  }
+  color map(Complex z) {
+    if (z.isNaN()) {
+      return color(127);
+    }
+    final float hue = (float)(z.arg()%TAU + TAU) % TAU;
+    final double mag = gridFactor*z.mag();
+    float l = (float)(((mag % 1d) + 1d) % 1d);
+    l = 0.7*l + 0.1;
+    
+    return HSL(hue, 1, l);
+  }
+}
+class ArgandStripedLogPolar extends ComplexColorMap {
+  double logFactor,dTheta;
+  ArgandStripedLogPolar(double logBase, int angles) {
+    logFactor= 1d / Math.log(logBase);
+    dTheta = TAU / angles;
+  }
+  color map(Complex z) {
+    if (z.isNaN()) {
+      return color(127);
+    }
+    final float hue = (float)(z.arg()%TAU + TAU) % TAU;
+    final double logMag = 0.5*logFactor*Math.log(z.mag2());
+    float l = (float)(((logMag % 1d) + 1d) % 1d);
+    l = 0.7*l + 0.1;
+    
+    return HSL(hue, 1, l);
+  }
+}
+
 
 class ArgandToYCoCg extends ComplexColorMap {
   double maxExpected;

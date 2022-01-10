@@ -11,6 +11,34 @@ abstract class InteractableFunction implements ComplexFunction{
   }
 }
 
+class BinetLike extends InteractableFunction{
+  ComplexSpinBox root1, root2;
+  BinetLike(ComplexPlane _plane, ComplexColorMap cmap, int spinBoxSize){
+    super(_plane);
+    root1 = new ComplexSpinBox(new Complex(1,0),cmap, width/2f - spinBoxSize ,height-spinBoxSize - 5,spinBoxSize,spinBoxSize);
+    root2 = new ComplexSpinBox(new Complex(-1,0),cmap, width/2f + spinBoxSize ,height-spinBoxSize - 5,spinBoxSize,spinBoxSize);
+  }
+  String name(){return "Generalised Binet-Style Function";}
+  String menuName(){return "Generalised Binet-Style Function";}
+  Complex f(Complex z){
+    return root1.value().raiseTo(z).sub(root2.value().raiseTo(z));
+  }
+  
+  boolean usingMouse(){return root1.dragging || root2.dragging;}
+  
+  void reColorise(ComplexColorMap cmap){
+    root1.reColorise(cmap);
+    root2.reColorise(cmap);
+  }
+  
+  void show(boolean polarSnap){
+    boolean updated = root1.show(polarSnap) || root2.show(polarSnap);
+    if(updated){onUpdate();}
+    text("Root 1",root1.screenPos.x + root1.screenSize.x/2 , root1.screenPos.y + 16);
+    text("Root 2",root2.screenPos.x + root2.screenSize.x/2 , root2.screenPos.y + 16);
+  }
+}
+
 class ArbitraryPolynomial extends InteractableFunction{
   CPolynomial P;
   IntegerSpinBox order;

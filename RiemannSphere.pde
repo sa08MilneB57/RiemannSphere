@@ -42,14 +42,15 @@ void setup() {
   plane = new ComplexPlane(RANGE, DETAIL);
   plane.applyFunction(new CIdentity());
   refreshColormap();
-  interactables = new InteractableFunction[6];
+  interactables = new InteractableFunction[7];
   interactables[0] = new Binomial(plane, cmaps[activeCmap], SPINBOXSIZE);
   interactables[1] = new MobiusTransform(plane, cmaps[activeCmap], SPINBOXSIZE);
   interactables[2] = new ArbitraryPolynomial(plane, cmaps[activeCmap], SPINBOXSIZE);
   interactables[3] = new ArbitraryPolynomialRoots(plane, cmaps[activeCmap], SPINBOXSIZE);
   interactables[4] = new AtomicSingularInnerFunction(plane, SPINBOXSIZE);
   interactables[5] = new HermiteFunction(plane, SPINBOXSIZE);
-  //interactables[6] = new BesselFirst(plane,cmaps[activeCmap],SPINBOXSIZE);
+  interactables[6] = new BinetLike(plane, cmaps[activeCmap], SPINBOXSIZE);
+  //interactables[7] = new BesselFirst(plane,cmaps[activeCmap],SPINBOXSIZE);
 
   startDistance = (height/2.0) / tan(PI/6.0);
 
@@ -131,11 +132,15 @@ void draw() {
 
 void refreshColormap() {
   float scaling = (colorScale > 0)? colorScale : -1f/colorScale;
-  cmaps = new ComplexColorMap[4];
+  cmaps = new ComplexColorMap[8];
   cmaps[0] = new ArgandToHueBright(scaling); 
   cmaps[1] = new ArgandGrid(scaling, scaling);
   cmaps[2] = new ArgandPolar(scaling, scaling, 8);
   cmaps[3] = new ArgandToYCoCg(scaling);
+  cmaps[4] = new ArgandStripedRB(scaling);
+  cmaps[5] = new ArgandStripedLogRB(2.718);
+  cmaps[6] = new ArgandStripedPolar(scaling,8);
+  cmaps[7] = new ArgandStripedLogPolar(2.718,8);
 }
 
 void normalMode() {
