@@ -68,8 +68,8 @@ ListMenu createFunctionList(InteractableFunction[] interactables,ComplexPlane pl
 }
 class FunctionListItem extends ListItem{
     ComplexFunction function;
-    ComplexPlane plane;
-    FunctionListItem(ComplexFunction val,ComplexPlane cplane,PVector p,PVector s,float H, float S, float L){
+    Functionable plane;
+    FunctionListItem(ComplexFunction val,Functionable cplane,PVector p,PVector s,float H, float S, float L){
       super(val.menuName(),p,s,H,S,L);
       function = val;
       plane = cplane;

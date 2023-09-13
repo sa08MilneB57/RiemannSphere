@@ -1,7 +1,11 @@
+interface Functionable{
+  void applyFunction(ComplexFunction f);
+}
+
 abstract class InteractableFunction implements ComplexFunction{
-  ComplexPlane plane;
+  Functionable plane;
   
-  InteractableFunction(ComplexPlane _plane){plane = _plane;}
+  InteractableFunction(Functionable _plane){plane = _plane;}
   
   abstract void show(boolean alt); //show functions should also handle interactivity and apply onUpdate();
   abstract boolean usingMouse();
@@ -13,7 +17,7 @@ abstract class InteractableFunction implements ComplexFunction{
 
 class BinetLike extends InteractableFunction{
   ComplexSpinBox root1, root2;
-  BinetLike(ComplexPlane _plane, ComplexColorMap cmap, int spinBoxSize){
+  BinetLike(Functionable _plane, ComplexColorMap cmap, int spinBoxSize){
     super(_plane);
     root1 = new ComplexSpinBox(new Complex(1,0),cmap, width/2f - spinBoxSize ,height-spinBoxSize - 5,spinBoxSize,spinBoxSize);
     root2 = new ComplexSpinBox(new Complex(-1,0),cmap, width/2f + spinBoxSize ,height-spinBoxSize - 5,spinBoxSize,spinBoxSize);
@@ -43,7 +47,7 @@ class ArbitraryPolynomial extends InteractableFunction{
   CPolynomial P;
   IntegerSpinBox order;
   ComplexSpinBox[] coefficients;
-  ArbitraryPolynomial(ComplexPlane _plane, ComplexColorMap cmap,int spinBoxSize){
+  ArbitraryPolynomial(Functionable _plane, ComplexColorMap cmap,int spinBoxSize){
     super(_plane);
     order = new IntegerSpinBox(2,(width - spinBoxSize)/2 ,48 ,spinBoxSize,spinBoxSize/2,0.3);
     onUpdateOrder(cmap);
@@ -125,7 +129,7 @@ class ArbitraryPolynomialRoots extends InteractableFunction{
   CPolynomial P;
   IntegerSpinBox rootNum;
   ComplexSpinBox[] roots;
-  ArbitraryPolynomialRoots(ComplexPlane _plane, ComplexColorMap cmap,int spinBoxSize){
+  ArbitraryPolynomialRoots(Functionable _plane, ComplexColorMap cmap,int spinBoxSize){
     super(_plane);
     rootNum = new IntegerSpinBox(4,(width - spinBoxSize)/2 ,48 ,spinBoxSize,spinBoxSize/2,0.3);
     onUpdateOrder(cmap);
@@ -219,7 +223,7 @@ class BesselFirst extends InteractableFunction{
   ComplexSpinBox order;
   final int accuracy = 30;
   ComplexFunction rgamma;
-  BesselFirst(ComplexPlane _plane,ComplexColorMap cmap,int spinBoxSize){
+  BesselFirst(Functionable _plane,ComplexColorMap cmap,int spinBoxSize){
     super(_plane);
     rgamma = new CReciprocalGamma(50);
     order = new ComplexSpinBox(new Complex(1,0),cmap,(width-spinBoxSize)/2 ,height-spinBoxSize - 5,spinBoxSize,spinBoxSize);
@@ -281,7 +285,7 @@ class Binomial extends InteractableFunction{
   final int accuracy = 30;
   ComplexSpinBox k;
   ComplexFunction rGamma;
-  Binomial(ComplexPlane _plane,ComplexColorMap cmap,int spinBoxSize){
+  Binomial(Functionable _plane,ComplexColorMap cmap,int spinBoxSize){
     super(_plane);
     k = new ComplexSpinBox(new Complex(1,0),cmap,(width-spinBoxSize)/2 ,height-spinBoxSize - 5,spinBoxSize,spinBoxSize);
     rGamma = new CReciprocalGamma(accuracy);
@@ -317,7 +321,7 @@ class Binomial extends InteractableFunction{
 class AtomicSingularInnerFunction extends InteractableFunction{
   IntegerSpinBox order;
   Complex[] roots;
-  AtomicSingularInnerFunction(ComplexPlane _plane,int spinBoxSize){
+  AtomicSingularInnerFunction(Functionable _plane,int spinBoxSize){
     super(_plane);
     order = new IntegerSpinBox(5,(width - spinBoxSize)/2 ,height-spinBoxSize/2 - 5,spinBoxSize,spinBoxSize/2,0.3);
   }
@@ -362,7 +366,7 @@ class AtomicSingularInnerFunction extends InteractableFunction{
 class HermiteFunction extends InteractableFunction{
   IntegerSpinBox order;
   ComplexFunction H,G,C,F;
-  HermiteFunction(ComplexPlane _plane,int spinBoxSize){
+  HermiteFunction(Functionable _plane,int spinBoxSize){
     super(_plane);
     order = new IntegerSpinBox(3,(width - spinBoxSize)/2 ,height-spinBoxSize/2 - 5,spinBoxSize,spinBoxSize/2,0.3);    
     refreshFunctions();
@@ -403,7 +407,7 @@ class HermiteFunction extends InteractableFunction{
 
 class MobiusTransform extends InteractableFunction{
   ComplexSpinBox a,b,c,d;
-  MobiusTransform(ComplexPlane _plane,ComplexColorMap cmap,int spinBoxSize){
+  MobiusTransform(Functionable _plane,ComplexColorMap cmap,int spinBoxSize){
     super(_plane);
     final float increment = width/5f;
     final float yPos = height - spinBoxSize - 10;

@@ -8,14 +8,13 @@ final color hudBack = color(200, 100, 255, 50);
 final color hudFront = color(255);
 
 
-
 ComplexColorMap[] cmaps;
 InteractableFunction[] interactables;
 InteractableFunction activeFunc;
 ListMenu flist;
 
 int activeCmap = 0;
-int absReIm = 1;//
+int absReIm = 1;
 ComplexPlane plane;
 int SPINBOXSIZE;
 float spheriness = 0f;
@@ -68,14 +67,16 @@ void draw() {
   rotateY(camAzimuth);
 
   plane.show(sphereRadius, heightScale, spheriness, cmaps[activeCmap],absReIm);
-  if (spheriness != 0) {  
-    strokeWeight(spheriness*2);
-    stroke(255, 0, 0, spheriness*255);
-    line(-width, 0, 0, width, 0, 0);
-    stroke(0, 255, 0, spheriness*255);
-    line(0, -width, 0, 0, width, 0);
-    stroke(0, 0, 255, spheriness*255);
-    line(0, 0, -width, 0, 0, width);
+  if (spheriness != 0) {
+    pushStyle();
+      strokeWeight(spheriness*2);
+      stroke(255, 0, 0, spheriness*255);
+      line(-width, 0, 0, width, 0, 0);
+      stroke(0, 255, 0, spheriness*255);
+      line(0, -width, 0, 0, width, 0);
+      stroke(0, 0, 255, spheriness*255);
+      line(0, 0, -width, 0, 0, width);
+    popStyle();
   }
   popMatrix();
 

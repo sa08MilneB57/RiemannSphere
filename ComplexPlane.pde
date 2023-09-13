@@ -1,4 +1,4 @@
-class ComplexPlane{
+class ComplexPlane implements Functionable{
   int detail;
   double r;
   ComplexFunction currentFunction;
