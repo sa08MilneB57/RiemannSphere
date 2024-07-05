@@ -33,7 +33,9 @@ ComplexFunction[] FUNCTIONS = {
                             
                             new CZeta(30),
                             new CGamma(30),
-                            new CReciprocalGamma(30)
+                            new CReciprocalGamma(30),
+                            
+                            new CGapsSeries(30)
                           };
 
 

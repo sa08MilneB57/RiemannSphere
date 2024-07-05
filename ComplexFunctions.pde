@@ -261,3 +261,24 @@ class CMandel implements ComplexFunction{
     return z;
   }
 }
+
+class CGapsSeries implements ComplexFunction{
+  int iters;
+  String name;
+  CGapsSeries(int _iters){
+    iters = _iters;
+    name = "x^2^n from 0 to " + Integer.toString(iters);
+  }
+  String name(){return name;}
+  String menuName(){return name;}
+  Complex f(Complex z){
+    if(z.mag2() >= 1){return new Complex(Double.POSITIVE_INFINITY,0);} 
+    Complex out = new Complex(0,0);
+    int power = 1;
+    for (int i=0;i<iters;i++){
+      out = out.add(z.raiseTo(power));
+      power *= 2;
+    }
+    return out;
+  }
+}
